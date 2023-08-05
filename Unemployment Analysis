@@ -1,0 +1,40 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+
+data = pd.read_csv('/content/Unemployment_Rate_upto_11_2020 - Unemployment_Rate_upto_11_2020.csv')
+print(data.head(10))
+
+data.info()
+
+print(data.isnull().sum())
+
+data.columns= ["States","Date","Frequency",
+               "Estimated Unemployment Rate",
+               "Estimated Employed",
+               "Estimated Labour Participation Rate",
+               "Region","longitude","latitude"]
+
+plt.style.use("seaborn-v0_8-whitegrid")
+plt.figure(figsize=(8,6))
+sns.heatmap(data.corr())
+plt.show
+
+plt.figure(figsize=(8, 6))
+plt.title("Indian Unemployment")
+sns.histplot(x="Estimated Employed", hue="Region", data=data)
+plt.show()
+
+plt.figure(figsize=(10, 8))
+plt.title("Indian Unemployment")
+sns.histplot(x="Estimated Unemployment Rate", hue="Region", data=data)
+plt.show()
+
+unemployment = data[["States", "Region", "Estimated Unemployment Rate"]]
+figure = px.sunburst(unemployment, path=["Region", "States"], 
+                     values="Estimated Unemployment Rate", 
+                     width=700, height=700, color_continuous_scale="RdY1Gn", 
+                     title="Unemployment Rate in India")
+figure.show()
